@@ -7,7 +7,7 @@ cam_number = 0
 flip = True 
 min_conf = 0.75
 max_hands = 2
-model_path = '/users/gursi/desktop/virtual_drawing_board/models/280.pt'
+model_path = '/users/gursi/desktop/virtual_drawing_board/models/230.pt'
 
 cap = cv2.VideoCapture(cam_number)
 
@@ -63,7 +63,7 @@ model = Model()
 model.load_state_dict(torch.load(model_path, map_location='cpu'))
 model.eval()
 
-action_map = {1:'Draw', 0:'Erase'}
+action_map = {0:'Draw', 1:'Erase', 2:'None'}
 
 ## cv2 text parameters
 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -92,7 +92,7 @@ while True :
             ## Mode check 
             landmark_list = landmark_extract(hand_landmarks, mpHands)
             model_input = torch.tensor(landmark_list, dtype=torch.float).unsqueeze(0)
-            action = action_map[round(model.forward(model_input).item())]
+            action = action_map[torch.argmax(model.forward(model_input)).item()]
             cv2.putText(frame, f'Mode : {action}', (20, h-50), font, fontScale, fontColor, lineType)
 
             ## Draw mode
