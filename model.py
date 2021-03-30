@@ -17,18 +17,21 @@ class Model(torch.nn.Module):
         self.bn4 = torch.nn.BatchNorm1d(200)
 
         self.linear5 = torch.nn.Linear(200,50)
-        self.output = torch.nn.Linear(50,1)
+        self.output = torch.nn.Linear(50,3)
         self.relu = torch.nn.ReLU()
-        self.sigmoid = torch.nn.Sigmoid()
+        self.dropout = torch.nn.Dropout(p=0.2)
 
     def forward(self,x):
         out = self.relu(self.bn1(self.linear1(x)))
+        out = self.dropout(out)
         out = self.relu(self.bn2(self.linear2(out)))
+        out = self.dropout(out)
         out = self.relu(self.bn3(self.linear3(out)))
+        out = self.dropout(out)
         out = self.relu(self.bn4(self.linear4(out)))
 
         out = self.relu(self.linear5(out))
-        out = self.sigmoid(self.output(out))
+        out = self.output(out)
         return out
 
 def test():
