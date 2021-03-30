@@ -3,14 +3,20 @@ import mediapipe as mp
 from model import Model 
 import torch 
 
-cap = cv2.VideoCapture(0)
+cam_number = 0
+flip = True 
+min_conf = 0.75
+max_hands = 2
+model_path = '/users/gursi/desktop/virtual_drawing_board/models/280.pt'
+
+cap = cv2.VideoCapture(cam_number)
 
 mpHands = mp.solutions.hands
 hands = mpHands.Hands(
     static_image_mode=False,
-    max_num_hands=2,
-    min_detection_confidence=0.75,
-    min_tracking_confidence=0.75
+    max_num_hands=max_hands,
+    min_detection_confidence=min_conf,
+    min_tracking_confidence=min_conf
 )
 mp_draw = mp.solutions.drawing_utils
 
@@ -53,7 +59,6 @@ def landmark_extract(hand_lms, mpHands):
 
 
 ## Loading torch model
-model_path = '/users/gursi/desktop/virtual_drawing_board/models/280.pt'
 model = Model()
 model.load_state_dict(torch.load(model_path, map_location='cpu'))
 model.eval()
@@ -64,13 +69,12 @@ action_map = {1:'Draw', 0:'Erase'}
 font = cv2.FONT_HERSHEY_SIMPLEX
 fontScale = 1
 fontColor = (255,255,255)
-lineType = 2
+lineType = 4
 
 ## Stores previously drawing circles to give continous lines
 circles = []
 
 ## Video feed loop
-flip = True
 while True : 
     success, frame = cap.read()
     if flip : 

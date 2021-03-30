@@ -59,7 +59,7 @@ def landmark_extract(hand_lms, mpHands):
 # ---------------------------------------------- Loop -------------------------------------------- #
 
 vid = cv2.VideoCapture(0)
-action = 'erase'
+action = 'none'
 
 try : 
     while True : 
