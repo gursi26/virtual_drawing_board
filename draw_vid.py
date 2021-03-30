@@ -8,6 +8,7 @@ flip = True
 min_conf = 0.75
 max_hands = 2
 model_path = '/users/gursi/desktop/virtual_drawing_board/models/280.pt'
+pen_color = (255,0,0)
 
 cap = cv2.VideoCapture(cam_number)
 
@@ -126,7 +127,7 @@ while True :
 
     ## Draws all stored circles 
     for position in circles : 
-        frame = cv2.circle(frame, position, 10,(0,255,0), -1)
+        frame = cv2.circle(frame, position, 10, pen_color, -1)
     
     cv2.imshow('output', frame)
 
