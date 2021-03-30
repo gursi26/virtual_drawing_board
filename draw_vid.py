@@ -80,7 +80,7 @@ while True :
         cv2.putText(frame, 'No hand in frame', (20, h-35), font, fontScale, fontColor, lineType)
     else : 
         for hand_landmarks in results.multi_hand_landmarks :
-            mp_draw.draw_landmarks(frame, hand_landmarks, mpHands.HAND_CONNECTIONS)
+            #mp_draw.draw_landmarks(frame, hand_landmarks, mpHands.HAND_CONNECTIONS)
 
             ## Mode check 
             landmark_list = landmark_extract(hand_landmarks, mpHands)
@@ -90,48 +90,30 @@ while True :
 
             ## Draw mode
             if action == 'Draw': 
+                mp_draw.draw_landmarks(frame, hand_landmarks, mpHands.HAND_CONNECTIONS)
                 index_x = hand_landmarks.landmark[mpHands.HandLandmark.INDEX_FINGER_TIP].x
                 index_y = hand_landmarks.landmark[mpHands.HandLandmark.INDEX_FINGER_TIP].y
                 pos = (int(index_x*w), int(index_y*h))
                 circles.append(pos)
 
             ## Erase mode
+            if action == 'Erase':
+                eraser_mid = [
+                        int(hand_landmarks.landmark[mpHands.HandLandmark.MIDDLE_FINGER_MCP].x * w),
+                        int(hand_landmarks.landmark[mpHands.HandLandmark.MIDDLE_FINGER_MCP].y * h)
+                    ]
 
-            eraser_bottom = [
-                    int(hand_landmarks.landmark[mpHands.HandLandmark.WRIST].x * w),
-                    int(hand_landmarks.landmark[mpHands.HandLandmark.WRIST].y * h)
-                ]
+                size = 80
+                bottom_right = (eraser_mid[0]+size, eraser_mid[1]+size)
+                top_left = (eraser_mid[0]-size, eraser_mid[1]-size)
 
-            eraser_top_left = [
-                int(hand_landmarks.landmark[mpHands.HandLandmark.PINKY_MCP].x * w),
-                int(hand_landmarks.landmark[mpHands.HandLandmark.PINKY_MCP].y * h)
-            ]
-
-            eraser_top_right = [
-                int(hand_landmarks.landmark[mpHands.HandLandmark.INDEX_FINGER_MCP].x * w),
-                int(hand_landmarks.landmark[mpHands.HandLandmark.INDEX_FINGER_MCP].y * h)
-            ]
-
-            if eraser_top_left[0] < eraser_top_right[0] : 
-                hand = 'Right'
-            else : 
-                hand = 'Left'
-            cv2.putText(frame, f'Hand : {hand}', (20, h-20), font, fontScale, fontColor, lineType)
-            
-            if action == "Erase":
-
+                cv2.rectangle(frame, top_left, bottom_right, (0,0,255), 3)
+                
                 try : 
-                    for point in range(len(circles)) : 
-                        if hand == 'Right' : 
-                            if circles[point][0]<eraser_top_right[0] and circles[point][0]>eraser_top_left[0] : 
-                                if circles[point][1]>eraser_top_left[1] and circles[point][1]>eraser_top_right[1] :
-                                    if circles[point][1]<eraser_bottom[1] :
-                                        circles.pop(point)
-                        else : 
-                            if circles[point][0]>eraser_top_right[0] and circles[point][0]<eraser_top_left[0] : 
-                                if circles[point][1]>eraser_top_left[1] and circles[point][1]>eraser_top_right[1] :
-                                    if circles[point][1]<eraser_bottom[1] :
-                                        circles.pop(point)
+                    for pt in range(len(circles)):
+                        if circles[pt][0]>top_left[0] and circles[pt][0]<bottom_right[0]: 
+                            if circles[pt][1]>top_left[1] and circles[pt][1]<bottom_right[1]:
+                                circles.pop(pt)
                 except IndexError : 
                     pass
 
