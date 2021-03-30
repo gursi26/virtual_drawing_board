@@ -9,8 +9,8 @@ mpHands = mp.solutions.hands
 hands = mpHands.Hands(
     static_image_mode=False,
     max_num_hands=2,
-    min_detection_confidence=0.9,
-    min_tracking_confidence=0.9
+    min_detection_confidence=0.75,
+    min_tracking_confidence=0.75
 )
 mp_draw = mp.solutions.drawing_utils
 
@@ -70,8 +70,11 @@ lineType = 2
 circles = []
 
 ## Video feed loop
+flip = True
 while True : 
     success, frame = cap.read()
+    if flip : 
+        frame = cv2.flip(frame,1)
     h,w,c = frame.shape
     img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = hands.process(img_rgb)
@@ -80,7 +83,7 @@ while True :
         cv2.putText(frame, 'No hand in frame', (20, h-35), font, fontScale, fontColor, lineType)
     else : 
         for hand_landmarks in results.multi_hand_landmarks :
-            #mp_draw.draw_landmarks(frame, hand_landmarks, mpHands.HAND_CONNECTIONS)
+            mp_draw.draw_landmarks(frame, hand_landmarks, mpHands.HAND_CONNECTIONS)
 
             ## Mode check 
             landmark_list = landmark_extract(hand_landmarks, mpHands)
@@ -90,10 +93,10 @@ while True :
 
             ## Draw mode
             if action == 'Draw': 
-                mp_draw.draw_landmarks(frame, hand_landmarks, mpHands.HAND_CONNECTIONS)
                 index_x = hand_landmarks.landmark[mpHands.HandLandmark.INDEX_FINGER_TIP].x
                 index_y = hand_landmarks.landmark[mpHands.HandLandmark.INDEX_FINGER_TIP].y
                 pos = (int(index_x*w), int(index_y*h))
+                cv2.circle(frame, pos, 20, (255,0,0), 2)
                 circles.append(pos)
 
             ## Erase mode
@@ -107,7 +110,7 @@ while True :
                 bottom_right = (eraser_mid[0]+size, eraser_mid[1]+size)
                 top_left = (eraser_mid[0]-size, eraser_mid[1]-size)
 
-                cv2.rectangle(frame, top_left, bottom_right, (0,0,255), 3)
+                cv2.rectangle(frame, top_left, bottom_right, (0,0,255), 5)
                 
                 try : 
                     for pt in range(len(circles)):
@@ -119,9 +122,10 @@ while True :
 
     ## Draws all stored circles 
     for position in circles : 
-        frame = cv2.circle(frame, position, 10,(255,0,0), -1)
+        frame = cv2.circle(frame, position, 10,(0,255,0), -1)
     
     cv2.imshow('output', frame)
+
     if cv2.waitKey(1) and 0xFF == ord('q'):
             break
 
