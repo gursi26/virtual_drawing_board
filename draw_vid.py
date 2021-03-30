@@ -5,9 +5,9 @@ import torch
 
 cam_number = 0
 flip = True 
-min_conf = 0.75
+min_conf = 0.85
 max_hands = 2
-model_path = '/users/gursi/desktop/virtual_drawing_board/models/230.pt'
+model_path = '/users/gursi/desktop/virtual_drawing_board/models/160.pt'
 
 cap = cv2.VideoCapture(cam_number)
 
