@@ -9,6 +9,7 @@ min_conf = 0.75
 max_hands = 2
 model_path = '/users/gursi/desktop/virtual_drawing_board/models/120.pt'
 pen_color = (255,0,0)
+eraser_size = 80
 
 cap = cv2.VideoCapture(cam_number)
 
@@ -111,9 +112,8 @@ while True :
                         int(hand_landmarks.landmark[mpHands.HandLandmark.MIDDLE_FINGER_MCP].y * h)
                     ]
 
-                size = 80
-                bottom_right = (eraser_mid[0]+size, eraser_mid[1]+size)
-                top_left = (eraser_mid[0]-size, eraser_mid[1]-size)
+                bottom_right = (eraser_mid[0]+eraser_size, eraser_mid[1]+eraser_size)
+                top_left = (eraser_mid[0]-eraser_size, eraser_mid[1]-eraser_size)
 
                 cv2.rectangle(frame, top_left, bottom_right, (0,0,255), 5)
                 
