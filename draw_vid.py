@@ -2,6 +2,7 @@ import cv2
 import mediapipe as mp 
 from model import Model 
 import torch 
+import time 
 
 cam_number = 0
 flip = True 
@@ -76,6 +77,9 @@ lineType = 4
 ## Stores previously drawing circles to give continous lines
 circles = []
 
+ptime = 0
+ctime = 0
+
 ## Video feed loop
 while True : 
     success, frame = cap.read()
@@ -84,9 +88,10 @@ while True :
     h,w,c = frame.shape
     img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = hands.process(img_rgb)
+    cv2.rectangle(frame, (0,h), (320,h-90), (0,0,0), -1, 1)
 
     if not results.multi_hand_landmarks : 
-        cv2.putText(frame, 'No hand in frame', (20, h-35), font, fontScale, fontColor, lineType)
+        cv2.putText(frame, 'No hand in frame', (20, h-50), font, fontScale, fontColor, lineType)
     else : 
         for hand_landmarks in results.multi_hand_landmarks :
             mp_draw.draw_landmarks(frame, hand_landmarks, mpHands.HAND_CONNECTIONS)
@@ -129,8 +134,12 @@ while True :
     for position in circles : 
         frame = cv2.circle(frame, position, 10, pen_color, -1)
     
-    cv2.imshow('output', frame)
+    ctime = time.time()
+    fps = round(1/(ctime-ptime),2)
+    ptime = ctime
+    cv2.putText(frame, f'FPS : {str(fps)}', (20, h-20), font, fontScale, fontColor, lineType)
 
+    cv2.imshow('output', frame)
     if cv2.waitKey(1) and 0xFF == ord('q'):
             break
 
