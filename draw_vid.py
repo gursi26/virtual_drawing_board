@@ -11,6 +11,7 @@ max_hands = 2
 model_path = '/users/gursi/desktop/virtual_drawing_board/models/120.pt'
 pen_color = (255,0,0)
 eraser_size = 80
+pen_size = 10
 
 cap = cv2.VideoCapture(cam_number)
 
@@ -132,7 +133,7 @@ while True :
 
     ## Draws all stored circles 
     for position in circles : 
-        frame = cv2.circle(frame, position, 10, pen_color, -1)
+        frame = cv2.circle(frame, position, pen_size, pen_color, -1)
     
     ctime = time.time()
     fps = round(1/(ctime-ptime),2)
