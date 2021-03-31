@@ -10,7 +10,7 @@ Drawing on a virtual canvas using hand pose estimation
 - OpenCV
 
 To test the whiteboard, follow the following steps:
-- Open the file `draw_vid.py`. Look for the variable named ***model_path*** and change it to point to the file ***120.pt*** in the ***models*** folder.
+- Open the file `draw_vid.py`. Look for the variable named `model_path` and change it to point to the file `120.pt` in the ***models*** folder.
 - Navigate into the project folder using your terminal and run the following command :
 
 ```
