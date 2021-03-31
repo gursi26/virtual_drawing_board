@@ -1,14 +1,15 @@
-import cv2
+import cv2, torch
+import time, os
 import mediapipe as mp 
 from model import Model 
-import torch 
-import time 
+
+current_path = os.path.dirname(__file__)
 
 cam_number = 0
 flip = True 
 min_conf = 0.75
 max_hands = 2
-model_path = '/users/gursi/desktop/virtual_drawing_board/models/120.pt'
+model_path = os.path.join(current_path, 'models/120.pt')
 pen_color = (255,0,0)
 eraser_size = 80
 pen_size = 10
