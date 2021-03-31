@@ -2,7 +2,7 @@
 Drawing on a virtual canvas using hand pose estimation
 
 ### Camera demo
-![[demo.gif]]
+![](imgs/demo.gif)
 
 ### Dependencies
 - Pytorch 
@@ -18,12 +18,12 @@ python draw_vid.py
 ```
 - Clenching a fist with your index finger sticking out allows you to **draw**.
 
-![[draw.png]]
+<img src ="imgs/draw.png" width="260px" />
 
 - Closing your hand into a fist allows you to **erase**, where the red box represents the bounds of the eraser.
 
-![[erase.png]]
+<img src ="imgs/erase.png" width="260px" />
 
 - Holding your hand with all of your fingers open does nothing.
 
-![[none.png]]
+<img src ="imgs/none.png" width="260px" />
