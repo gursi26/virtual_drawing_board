@@ -4,7 +4,7 @@ Drawing on a virtual canvas using hand pose estimation
 ### Camera demo
 ![](imgs/demo.gif)
 
-### Dependencies
+### Libraries used
 - Pytorch 
 - Mediapipe 
 - OpenCV
