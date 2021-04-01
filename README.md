@@ -5,6 +5,7 @@ Drawing on a virtual canvas using hand pose estimation
 ![](imgs/demo.gif)
 
 ### Libraries used
+<hr>
 - Pytorch 
 - Mediapipe 
 - OpenCV
@@ -27,3 +28,10 @@ python draw_vid.py
 - Holding your hand with all of your fingers open does nothing.
 
 <img src ="imgs/none.png" width="260px" />
+
+### References
+<hr>
+![Mediapipe repository](https://github.com/google/mediapipe.git)
+![Hand pose estimation tutorial](https://www.youtube.com/watch?v=NZde8Xt78Iw&t=983s)
+
+Licensed under the [MIT License](LICENSE)
