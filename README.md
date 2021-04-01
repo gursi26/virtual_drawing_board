@@ -3,6 +3,7 @@ Drawing on a virtual canvas using hand pose estimation
 
 ### Camera demo
 ![](imgs/demo.gif)
+<hr>
 
 ### Libraries used
 - Pytorch 
@@ -27,6 +28,7 @@ python draw_vid.py
 - Holding your hand with all of your fingers open does nothing.
 
 <img src ="imgs/none.png" width="260px" />
+<hr>
 
 ### References
 
