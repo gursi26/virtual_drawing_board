@@ -1,17 +1,44 @@
-# Virtual drawing board
-Drawing on a virtual canvas using hand pose estimation
+<h1 align="center"> Virtual drawing board ✍️</h1>
 
-### Camera demo
+<h2 align="center">
+
+
+![python](https://forthebadge.com/images/badges/made-with-python.svg)
+
+
+[![Pytourch](https://img.shields.io/badge/-PyTorch-white?style=flat-square&logo=PyTorch)](https://pytorch.org/)
+[![OpenCV](https://img.shields.io/badge/-OpenCV-blueviolet?style=flat-square&logo=OpenCV)](https://opencv.org/)
+[![MediaPipe](https://img.shields.io/badge/-MediaPipe-white?style=flat-square&logo=Clyp)](https://mediapipe.dev/)
+[![license](https://img.shields.io/github/license/gursi26/virtual_drawing_board.svg?style=flat-square)](https://github.com/gursi26/virtual_drawing_board/blob/main/LICENSE)
+
+</h2>
+
+### Drawing on a virtual canvas using hand pose estimation
+
+
+</br>
+<h3 align="center">
+
 ![](imgs/demo.gif)
+
+</h3>
+</br>
 <hr>
 
-### Libraries used
+
+## Libraries used
 - Pytorch 
 - Mediapipe 
 - OpenCV
 
-To test the whiteboard, run `main.py`.
 
+To test the whiteboard, follow the following steps:
+- Open the file `draw_vid.py`. Look for the variable named `model_path` and change it to point to the file `120.pt` in the ***models*** folder.
+- Navigate into the project folder using your terminal and run the following command :
+
+```python
+python draw_vid.py
+```
 - Clenching a fist with your index finger sticking out allows you to **draw**.
 
 <img src ="imgs/draw.png" width="260px" />
@@ -25,9 +52,13 @@ To test the whiteboard, run `main.py`.
 <img src ="imgs/none.png" width="260px" />
 <hr>
 
-### References
+## References
 
-- [Mediapipe repository](https://github.com/google/mediapipe.git)<br>
+- [Mediapipe repository](https://github.com/google/mediapipe.git)
 - [Hand pose estimation tutorial](https://www.youtube.com/watch?v=NZde8Xt78Iw&t=983s)
 
+<h3 align="right">
+
 Licensed under the [MIT License](LICENSE)
+
+</h3>
