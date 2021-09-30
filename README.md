@@ -32,13 +32,8 @@
 - OpenCV
 
 
-To test the whiteboard, follow the following steps:
-- Open the file `draw_vid.py`. Look for the variable named `model_path` and change it to point to the file `120.pt` in the ***models*** folder.
-- Navigate into the project folder using your terminal and run the following command :
+To test the whiteboard, run `main.py`.
 
-```python
-python draw_vid.py
-```
 - Clenching a fist with your index finger sticking out allows you to **draw**.
 
 <img src ="imgs/draw.png" width="260px" />
