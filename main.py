@@ -3,7 +3,7 @@ import time, os
 import mediapipe as mp 
 from model import Model 
 
-current_path = os.path.dirname(__file__)
+current_path = os.getcwd()
 
 cam_number = 0
 flip = True 
