@@ -67,8 +67,7 @@ try :
             for hand_landmarks in results.multi_hand_landmarks :
                 mp_draw.draw_landmarks(frame, hand_landmarks, mpHands.HAND_CONNECTIONS)
 
-                landmark_list = landmark_extract(hand_landmarks, mpHands)
-                landmark_list.insert(0,action)
+                landmark_list = [action, *landmark_extract(hand_landmarks, mpHands)]
 
                 landmark_df = pd.DataFrame([landmark_list], columns=cols)
                 dataset = dataset.append(landmark_df)
