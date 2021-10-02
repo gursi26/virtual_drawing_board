@@ -81,15 +81,22 @@ circles = []
 ptime = 0
 ctime = 0
 
+## Checks if the circle is out of bounds or not
+def is_position_out_of_bounds(position, top_left, bottom_right):
+    return (
+        position[0] > top_left[0] and position[0] < bottom_right[0]
+        and position[1] > top_left[1] and position[1] bottom_right[1]
+    )
+
 ## Video feed loop
 while True : 
     success, frame = cap.read()
     if flip : 
         frame = cv2.flip(frame,1)
-    h,w,c = frame.shape
+    h, w, c = frame.shape
     img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = hands.process(img_rgb)
-    cv2.rectangle(frame, (w,h), (w-320,h-90), (0,0,0), -1, 1)
+    cv2.rectangle(frame, (w, h), (w-320, h-90), (0, 0, 0), -1, 1)
 
     if not results.multi_hand_landmarks : 
         cv2.putText(frame, 'No hand in frame', (w-300, h-50), font, fontScale, fontColor, lineType)
@@ -114,22 +121,20 @@ while True :
             ## Erase mode
             if action == 'Erase':
                 eraser_mid = [
-                        int(hand_landmarks.landmark[mpHands.HandLandmark.MIDDLE_FINGER_MCP].x * w),
-                        int(hand_landmarks.landmark[mpHands.HandLandmark.MIDDLE_FINGER_MCP].y * h)
-                    ]
+                    int(hand_landmarks.landmark[mpHands.HandLandmark.MIDDLE_FINGER_MCP].x * w),
+                    int(hand_landmarks.landmark[mpHands.HandLandmark.MIDDLE_FINGER_MCP].y * h)
+                ]
 
                 bottom_right = (eraser_mid[0]+eraser_size, eraser_mid[1]+eraser_size)
                 top_left = (eraser_mid[0]-eraser_size, eraser_mid[1]-eraser_size)
 
                 cv2.rectangle(frame, top_left, bottom_right, (0,0,255), 5)
-                
-                try : 
-                    for pt in range(len(circles)):
-                        if circles[pt][0]>top_left[0] and circles[pt][0]<bottom_right[0]: 
-                            if circles[pt][1]>top_left[1] and circles[pt][1]<bottom_right[1]:
-                                circles.pop(pt)
-                except IndexError : 
-                    pass
+
+                circles = [
+                    position
+                    for position in circles
+                    if not is_position_out_of_bounds(position, top_left, bottom_right)
+                ]
 
     ## Draws all stored circles 
     for position in circles : 
@@ -138,7 +143,7 @@ while True :
     ctime = time.time()
     fps = round(1/(ctime-ptime),2)
     ptime = ctime
-    cv2.putText(frame, f'FPS : {str(fps)}', (w-300, h-20), font, fontScale, fontColor, lineType)
+    cv2.putText(frame, f'FPS : {fps}', (w-300, h-20), font, fontScale, fontColor, lineType)
 
     cv2.imshow('output', frame)
     if cv2.waitKey(1) and 0xFF == ord('q'):
