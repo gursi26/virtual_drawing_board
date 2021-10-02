@@ -3,11 +3,7 @@ import mediapipe as mp
 import pandas as pd 
 
 # ---------------------------------------------- Single run ----------------------------------------- #
-cols = []
-cols.append('label')
-for i in range(63):
-    cols.append(str(i))
-
+cols = ['label', *map(str, range(63))]
 dataset = pd.DataFrame(columns=cols)
 
 mpHands = mp.solutions.hands
