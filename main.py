@@ -25,12 +25,7 @@ hands = mpHands.Hands(
 )
 mp_draw = mp.solutions.drawing_utils
 
-
-## Extract landmark positions as array 
-def landmark_extract(hand_lms, mpHands):
-    output_lms = []
-
-    lm_list = [
+_lm_list = [
     mpHands.HandLandmark.WRIST, 
     mpHands.HandLandmark.THUMB_CMC, 
     mpHands.HandLandmark.THUMB_MCP,
@@ -52,15 +47,27 @@ def landmark_extract(hand_lms, mpHands):
     mpHands.HandLandmark.PINKY_DIP, 
     mpHands.HandLandmark.PINKY_PIP, 
     mpHands.HandLandmark.PINKY_TIP
-    ]
+]
 
-    for lm in lm_list : 
+## Extract landmark positions as array 
+def landmark_extract(hand_lms, mpHands):
+    output_lms = []
+
+    for lm in _lm_list : 
         lms = hand_lms.landmark[lm]
         output_lms.append(lms.x)
         output_lms.append(lms.y)
         output_lms.append(lms.z)
 
     return output_lms
+
+
+## Checks if the position is out of bounds or not
+def is_position_out_of_bounds(position, top_left, bottom_right):
+    return (
+        position[0] > top_left[0] and position[0] < bottom_right[0]
+        and position[1] > top_left[1] and position[1] < bottom_right[1]
+    )
 
 
 ## Loading torch model
@@ -124,13 +131,11 @@ while True :
 
                 cv2.rectangle(frame, top_left, bottom_right, (0,0,255), 5)
                 
-                try : 
-                    for pt in range(len(circles)):
-                        if circles[pt][0]>top_left[0] and circles[pt][0]<bottom_right[0]: 
-                            if circles[pt][1]>top_left[1] and circles[pt][1]<bottom_right[1]:
-                                circles.pop(pt)
-                except IndexError : 
-                    pass
+                circles = [
+                    position
+                    for position in circles
+                    if not is_position_out_of_bounds(position, top_left, bottom_right)
+                ]
 
     ## Draws all stored circles 
     for position in circles : 
@@ -139,7 +144,7 @@ while True :
     ctime = time.time()
     fps = round(1/(ctime-ptime),2)
     ptime = ctime
-    cv2.putText(frame, f'FPS : {str(fps)}', (w-300, h-20), font, fontScale, fontColor, lineType)
+    cv2.putText(frame, f'FPS : {fps}', (w-300, h-20), font, fontScale, fontColor, lineType)
 
     cv2.imshow('output', frame)
     if cv2.waitKey(1) and 0xFF == ord('q'):

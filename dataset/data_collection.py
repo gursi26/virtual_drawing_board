@@ -3,11 +3,7 @@ import mediapipe as mp
 import pandas as pd 
 
 # ---------------------------------------------- Single run ----------------------------------------- #
-cols = []
-cols.append('label')
-for i in range(63):
-    cols.append(str(i))
-
+cols = ['label', *map(str, range(63))]
 dataset = pd.DataFrame(columns=cols)
 
 mpHands = mp.solutions.hands
@@ -19,11 +15,7 @@ hands = mpHands.Hands(
 )
 mp_draw = mp.solutions.drawing_utils
 
-
-def landmark_extract(hand_lms, mpHands):
-    output_lms = []
-
-    lm_list = [
+_lm_list = [
     mpHands.HandLandmark.WRIST, 
     mpHands.HandLandmark.THUMB_CMC, 
     mpHands.HandLandmark.THUMB_MCP,
@@ -45,9 +37,12 @@ def landmark_extract(hand_lms, mpHands):
     mpHands.HandLandmark.PINKY_DIP, 
     mpHands.HandLandmark.PINKY_PIP, 
     mpHands.HandLandmark.PINKY_TIP
-    ]
+]
 
-    for lm in lm_list : 
+def landmark_extract(hand_lms, mpHands):
+    output_lms = []
+
+    for lm in _lm_list : 
         lms = hand_lms.landmark[lm]
         output_lms.append(lms.x)
         output_lms.append(lms.y)
@@ -72,8 +67,7 @@ try :
             for hand_landmarks in results.multi_hand_landmarks :
                 mp_draw.draw_landmarks(frame, hand_landmarks, mpHands.HAND_CONNECTIONS)
 
-                landmark_list = landmark_extract(hand_landmarks, mpHands)
-                landmark_list.insert(0,action)
+                landmark_list = [action, *landmark_extract(hand_landmarks, mpHands)]
 
                 landmark_df = pd.DataFrame([landmark_list], columns=cols)
                 dataset = dataset.append(landmark_df)
