@@ -25,12 +25,7 @@ hands = mpHands.Hands(
 )
 mp_draw = mp.solutions.drawing_utils
 
-
-## Extract landmark positions as array 
-def landmark_extract(hand_lms, mpHands):
-    output_lms = []
-
-    lm_list = [
+_lm_list = [
     mpHands.HandLandmark.WRIST, 
     mpHands.HandLandmark.THUMB_CMC, 
     mpHands.HandLandmark.THUMB_MCP,
@@ -52,9 +47,13 @@ def landmark_extract(hand_lms, mpHands):
     mpHands.HandLandmark.PINKY_DIP, 
     mpHands.HandLandmark.PINKY_PIP, 
     mpHands.HandLandmark.PINKY_TIP
-    ]
+]
 
-    for lm in lm_list : 
+## Extract landmark positions as array 
+def landmark_extract(hand_lms, mpHands):
+    output_lms = []
+
+    for lm in _lm_list : 
         lms = hand_lms.landmark[lm]
         output_lms.append(lms.x)
         output_lms.append(lms.y)
