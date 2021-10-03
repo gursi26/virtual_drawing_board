@@ -6,7 +6,7 @@
 ![python](https://forthebadge.com/images/badges/made-with-python.svg)
 
 
-[![Pytourch](https://img.shields.io/badge/-PyTorch-white?style=flat-square&logo=PyTorch)](https://pytorch.org/)
+[![PyTorch](https://img.shields.io/badge/-PyTorch-white?style=flat-square&logo=PyTorch)](https://pytorch.org/)
 [![OpenCV](https://img.shields.io/badge/-OpenCV-blueviolet?style=flat-square&logo=OpenCV)](https://opencv.org/)
 [![MediaPipe](https://img.shields.io/badge/-MediaPipe-white?style=flat-square&logo=Clyp)](https://mediapipe.dev/)
 [![license](https://img.shields.io/github/license/gursi26/virtual_drawing_board.svg?style=flat-square)](https://github.com/gursi26/virtual_drawing_board/blob/main/LICENSE)
@@ -27,7 +27,7 @@
 
 
 ## Libraries used
-- Pytorch 
+- PyTorch 
 - Mediapipe 
 - OpenCV
 
