@@ -86,6 +86,8 @@ lineType = 4
 ## Stores previously drawing circles to give continous lines
 circles = []
 
+was_drawing_last_frame = False
+
 ptime = 0
 ctime = 0
 
@@ -99,7 +101,8 @@ while True :
     results = hands.process(img_rgb)
     cv2.rectangle(frame, (w,h), (w-320,h-90), (0,0,0), -1, 1)
 
-    if not results.multi_hand_landmarks : 
+    if not results.multi_hand_landmarks :
+        was_drawing_last_frame = False
         cv2.putText(frame, 'No hand in frame', (w-300, h-50), font, fontScale, fontColor, lineType)
     else : 
         for hand_landmarks in results.multi_hand_landmarks :
@@ -117,7 +120,24 @@ while True :
                 index_y = hand_landmarks.landmark[mpHands.HandLandmark.INDEX_FINGER_TIP].y
                 pos = (int(index_x*w), int(index_y*h))
                 cv2.circle(frame, pos, 20, (255,0,0), 2)
+                if was_drawing_last_frame:
+                    prev_pos = circles[-1]
+                    x_distance = pos[0] - prev_pos[0]
+                    y_distance = pos[1] - prev_pos[1]
+                    distance = (x_distance ** 2 + y_distance ** 2) ** 0.5
+                    num_step_points = int(distance) - 1
+                    if num_step_points > 0:
+                        x_normalized = x_distance / distance
+                        y_normalized = y_distance / distance
+                        for i in range(1, num_step_points + 1):
+                            step_pos_x = prev_pos[0] + int(x_normalized * i)
+                            step_pos_y = prev_pos[1] + int(y_normalized * i)
+                            step_pos = (step_pos_x, step_pos_y)
+                            circles.append(step_pos)
                 circles.append(pos)
+                was_drawing_last_frame = True
+            else:
+                was_drawing_last_frame = False
 
             ## Erase mode
             if action == 'Erase':
