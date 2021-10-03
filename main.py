@@ -13,6 +13,7 @@ model_path = os.path.join(current_path, 'models/120.pt')
 pen_color = (255,0,0)
 eraser_size = 80
 pen_size = 10
+intermediate_step_gap = 4
 
 cap = cv2.VideoCapture(cam_number)
 
@@ -125,7 +126,7 @@ while True :
                     x_distance = pos[0] - prev_pos[0]
                     y_distance = pos[1] - prev_pos[1]
                     distance = (x_distance ** 2 + y_distance ** 2) ** 0.5
-                    num_step_points = int(distance) - 1
+                    num_step_points = int(distance) // intermediate_step_gap - 1
                     if num_step_points > 0:
                         x_normalized = x_distance / distance
                         y_normalized = y_distance / distance
