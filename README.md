@@ -25,6 +25,9 @@
 </br>
 <hr>
 
+## Installation
+- simply change the directory to the cloned folder give the command `python setup.py install` to install the virtual drawing board
+- initislize the software by running `main.py` with the command `pyhton main.py`
 
 ## Libraries used
 - PyTorch 
