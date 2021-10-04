@@ -5,14 +5,20 @@ from model import Model
 
 current_path = os.getcwd()
 
+# Camera number, can be varied if using multiple webcams
 cam_number = 0
-flip = True 
+# Laterally inverting video stream
+flip = True
+# Minimum confidence score required for detecting and marking hand landmarks
 min_conf = 0.75
 max_hands = 2
+# Path of trained model. Can be changed to point to a custom model
 model_path = os.path.join(current_path, 'models/120.pt')
+# Pen parameters 
 pen_color = (255,0,0)
 eraser_size = 80
 pen_size = 10
+# The density of the line. Smaller values make the line more smooth.
 intermediate_step_gap = 4
 
 cap = cv2.VideoCapture(cam_number)
@@ -84,7 +90,7 @@ fontScale = 1
 fontColor = (255,255,255)
 lineType = 4
 
-## Stores previously drawing circles to give continous lines
+## Stores previously drawn circles to give continous lines
 circles = []
 
 was_drawing_last_frame = False
