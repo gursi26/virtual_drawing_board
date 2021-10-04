@@ -36,7 +36,7 @@ cv2.createTrackbar('Red', 'control', 0, 255, nothing)
 cv2.createTrackbar('Blue', 'control', 0, 255, nothing)
 cv2.createTrackbar('Green', 'control', 0, 255, nothing)
 cv2.createTrackbar('pen_thickness', 'control', 0, 30, nothing)
-cv2.createTrackbar('Imd_step_gap', 'control', 2, 50, nothing)
+cv2.createTrackbar('Imd_step_gap', 'control', 0, 29, nothing)
 # Button size
 button = [20, 60, 145, 460]
 
@@ -47,7 +47,6 @@ def process_click(event, x, y, flags, params):
         if button[0] < y < button[1] and button[2] < x < button[3]:
             cv2.imwrite('Image' + str(fps) + '.png', frame)
             img[:80, :] = (0, 0, 255)
-            print('Clicked on Button!')
 
 
 cv2.setMouseCallback('control', process_click)
@@ -120,10 +119,9 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 fontScale = 1
 fontColor = (255, 255, 255)
 lineType = 4
-## Stores previously drawn circles to give continous lines
+## Stores previously drawn circles to give continous lines and also store current color and size of pen
 circles = []
-## Stores tuples that contain position, pencil_colour and pencil_size
-params = []
+
 was_drawing_last_frame = False
 
 ptime = 0
@@ -142,7 +140,9 @@ while True:
     g = cv2.getTrackbarPos('Green', 'control')
     r = cv2.getTrackbarPos('Red', 'control')
     t = cv2.getTrackbarPos('pen_thickness', 'control')
-    imd_step_gap = cv2.getTrackbarPos('Imd_step_gap', 'control')+1
+    # Added 1 to make range of imd_step_gap equal to [1, 30].
+    imd_step_gap = (cv2.getTrackbarPos('Imd_step_gap', 'control')+1)/10
+    
     intermediate_step_gap = imd_step_gap
     if not results.multi_hand_landmarks:
         was_drawing_last_frame = False
@@ -166,12 +166,11 @@ while True:
                 pos = (int(index_x * w), int(index_y * h))
                 cv2.circle(frame, pos, 20, (255, 0, 0), 2)
                 if was_drawing_last_frame:
-                    prev_pos = circles[-1]
+                    prev_pos = circles[-1][0]
                     x_distance = pos[0] - prev_pos[0]
                     y_distance = pos[1] - prev_pos[1]
                     distance = (x_distance ** 2 + y_distance ** 2) ** 0.5
-                    num_step_points = int(distance) // intermediate_step_gap - 1
-                    print(num_step_points)
+                    num_step_points = int(int(distance) // intermediate_step_gap) - 1
                     if num_step_points > 0:
                         x_normalized = x_distance / distance
                         y_normalized = y_distance / distance
@@ -179,9 +178,9 @@ while True:
                             step_pos_x = prev_pos[0] + int(x_normalized * i)
                             step_pos_y = prev_pos[1] + int(y_normalized * i)
                             step_pos = (step_pos_x, step_pos_y)
-                            circles.append(step_pos)
-                circles.append(pos)
-                params.append((pos, pen_color, pen_size))
+                            circles.append((step_pos, pen_color, pen_size))
+                
+                circles.append((pos, pen_color, pen_size))
                 was_drawing_last_frame = True
             else:
                 was_drawing_last_frame = False
@@ -199,13 +198,13 @@ while True:
                 cv2.rectangle(frame, top_left, bottom_right, (0, 0, 255), 5)
 
                 circles = [
-                    position
-                    for position in circles
+                    (position, pen_color, pen_size)
+                    for position, pen_color, pen_size in circles
                     if not is_position_out_of_bounds(position, top_left, bottom_right)
                 ]
 
     ## Draws all stored circles
-    for position, pen_color, pen_size in params:
+    for position, pen_color, pen_size in circles:
         frame = cv2.circle(frame, position, pen_size, pen_color, -1)
 
     ctime = time.time()
