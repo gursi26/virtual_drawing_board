@@ -1,6 +1,7 @@
 import cv2, torch
 import time, os
 import mediapipe as mp 
+import numpy as np
 from model import Model 
 
 current_path = os.getcwd()
