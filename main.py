@@ -37,9 +37,10 @@ cv2.createTrackbar('Blue', 'control', 0, 255, nothing)
 cv2.createTrackbar('Green', 'control', 0, 255, nothing)
 cv2.createTrackbar('pen_thickness', 'control', 0, 30, nothing)
 cv2.createTrackbar('Imd_step_gap', 'control', 2, 50, nothing)
+# Button size
 button = [20, 60, 145, 460]
 
-
+# Function to click button
 def process_click(event, x, y, flags, params):
     # check if the click is within the dimensions of the button
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -121,6 +122,7 @@ fontColor = (255, 255, 255)
 lineType = 4
 ## Stores previously drawn circles to give continous lines
 circles = []
+## Stores tuples that contain position, pencil_colour and pencil_size
 params = []
 was_drawing_last_frame = False
 
@@ -141,9 +143,6 @@ while True:
     r = cv2.getTrackbarPos('Red', 'control')
     t = cv2.getTrackbarPos('pen_thickness', 'control')
     imd_step_gap = cv2.getTrackbarPos('Imd_step_gap', 'control')+1
-    #print(imd_step_gap)
-    # pen_color = (b, g, r)
-    # pen_size = t
     intermediate_step_gap = imd_step_gap
     if not results.multi_hand_landmarks:
         was_drawing_last_frame = False
