@@ -20,7 +20,21 @@ eraser_size = 80
 pen_size = 10
 # The density of the line. Smaller values make the line more smooth.
 intermediate_step_gap = 4
+# Create Control window to change color and size of pen
+cv2.namedWindow('control')
+# This show the color
+img = np.zeros((100, 600, 3), np.uint8)
 
+
+def nothing(x):
+    pass
+# This create trackbar to adjust various values.
+cv2.createTrackbar('Red', 'control', 0, 255, nothing)
+cv2.createTrackbar('Blue', 'control', 0, 255, nothing)
+cv2.createTrackbar('Green', 'control', 0, 255, nothing)
+cv2.createTrackbar('pen_thickness', 'control', 0, 30, nothing)
+switch = 'final_img_save: NO\n 1: YES'
+cv2.createTrackbar(switch, 'control', 0, 1, nothing)
 cap = cv2.VideoCapture(cam_number)
 
 mpHands = mp.solutions.hands
@@ -107,7 +121,13 @@ while True :
     img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = hands.process(img_rgb)
     cv2.rectangle(frame, (w,h), (w-320,h-90), (0,0,0), -1, 1)
-
+    b = cv2.getTrackbarPos('Blue', 'control')
+    g = cv2.getTrackbarPos('Green', 'control')
+    r = cv2.getTrackbarPos('Red', 'control')
+    t = cv2.getTrackbarPos('pen_thickness', 'control')
+    s = cv2.getTrackbarPos(switch, 'control')
+    pen_color = (b, g, r)
+    pen_size = t
     if not results.multi_hand_landmarks :
         was_drawing_last_frame = False
         cv2.putText(frame, 'No hand in frame', (w-300, h-50), font, fontScale, fontColor, lineType)
@@ -174,6 +194,12 @@ while True :
     cv2.putText(frame, f'FPS : {fps}', (w-300, h-20), font, fontScale, fontColor, lineType)
 
     cv2.imshow('output', frame)
+    cv2.imshow('control', img)
+    img[:] = [b, g, r]
+    # for saving final image and quit.
+    if s == 1:
+        cv2.imwrite("Image" + str(fps) + ".png", frame)
+        break
     if cv2.waitKey(1) and 0xFF == ord('q'):
             break
 
