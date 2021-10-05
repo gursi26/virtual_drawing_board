@@ -35,8 +35,8 @@ def nothing(x):
 cv2.createTrackbar('Red', 'control', 0, 255, nothing)
 cv2.createTrackbar('Blue', 'control', 0, 255, nothing)
 cv2.createTrackbar('Green', 'control', 0, 255, nothing)
-cv2.createTrackbar('pen_thickness', 'control', 0, 30, nothing)
-cv2.createTrackbar('Imd_step_gap', 'control', 0, 29, nothing)
+cv2.createTrackbar('pen_thickness', 'control', 5, 30, nothing)
+cv2.createTrackbar('Imd_step_gap', 'control', 10, 29, nothing)
 # Button size
 button = [20, 60, 145, 460]
 
@@ -155,7 +155,7 @@ while True:
             landmark_list = landmark_extract(hand_landmarks, mpHands)
             model_input = torch.tensor(landmark_list, dtype=torch.float).unsqueeze(0)
             action = action_map[torch.argmax(model.forward(model_input)).item()]
-            cv2.putText(frame, f'Mode : {action}', (w - 300, h - 50), font, fontScale, fontColor, lineType)
+            cv2.putText(frame, f"Mode : {action}", (w - 300, h - 50), font, fontScale, fontColor, lineType)
 
             ## Draw mode
             if action == 'Draw':
